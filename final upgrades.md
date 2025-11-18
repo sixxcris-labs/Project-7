@@ -569,6 +569,18 @@ Phase D – Beyond This Merge (Future Backlog)
 
 Anything where GPT could orchestrate actions (e.g., call live approval routes, tweak risk profiles) stays in the same Future Backlog bucket as “LLM orchestration & SaaS hardening,” not this merge. 
 
+**Bonus – Docker smoke verification**  
+Use the legacy Docker/Kubernetes assets to run a containerized check of the paper-trading stack:
+
+```bash
+cd legacy_original_project7_main/Project7_CryptoBot_Dev
+docker compose --profile dev up --build
+# curl http://localhost:8080/api/agents/run-analysis etc.
+docker compose --profile dev down
+```
+
+This hit the same `/dashboard`, `/trading`, and `tradingFlow` APIs with containers, keeping your local Node tooling untouched.
+
 final upgrades
 
 If you tell me your exact backend stack (Express, Nest, FastAPI, etc.), I can turn this into concrete code stubs for gptTools, GptAssistantService, and the /api/ai/ask route tailored to your framework.
