@@ -1,1 +1,81 @@
-import { create } from 'zustand'; import { tradingFlowApi } from '../lib/tradingFlowApi'; export const useTradingSession = create((set,get)=>( { symbol:'BTCUSDT', timeframe:'1h', capital:100000, loading:false, analysis:undefined, plan:undefined, risk:undefined, approval:undefined, async runAgents(){ set({loading:true}); try{ const {symbol,timeframe,capital}=get(); const a=await tradingFlowApi.runAnalysis({symbol,timeframe,capital}); set({analysis:a}); } finally{ set({loading:false}); } }, async generatePlan(){ set({loading:true}); try{ const {analysis,symbol,timeframe,capital}=get(); if(!analysis) throw new Error('Run agents first'); const plan=await tradingFlowApi.generateTradePlan({analysisId:analysis.id,symbol,timeframe,capital}); set({plan}); } finally{ set({loading:false}); } }, async validateRisk(profile:any){ set({loading:true}); try{ const {plan}=get(); if(!plan) throw new Error('Generate plan first'); const risk=await tradingFlowApi.validateTradePlan(plan, profile); set({risk}); } finally{ set({loading:false}); } }, async approvePaper(){ set({loading:true}); try{ const {plan,risk}=get(); if(!plan||!risk) throw new Error('Missing plan/risk'); if(risk.status!=='ok') throw new Error('Risk not OK'); const approval=await tradingFlowApi.approvePaper(plan, risk.id, ['Confirm paper']); set({approval}); } finally{ set({loading:false}); } }, reset(){ set({analysis:undefined,plan:undefined,risk:undefined,approval:undefined}); } }))
+import { create } from 'zustand';
+import { tradingFlowApi } from '../lib/tradingFlowApi';
+
+interface TradingSessionState {
+  symbol: string;
+  timeframe: string;
+  capital: number;
+  loading: boolean;
+  analysis: any;
+  plan: any;
+  risk: any;
+  approval: any;
+  runAgents: () => Promise<void>;
+  generatePlan: () => Promise<void>;
+  validateRisk: (profile: any) => Promise<void>;
+  approvePaper: () => Promise<void>;
+  reset: () => void;
+}
+
+export const useTradingSession = create<TradingSessionState>((set, get) => ({
+  symbol: 'BTCUSDT',
+  timeframe: '1h',
+  capital: 100000,
+  loading: false,
+  analysis: undefined,
+  plan: undefined,
+  risk: undefined,
+  approval: undefined,
+  async runAgents() {
+    set({ loading: true });
+    try {
+      const { symbol, timeframe, capital } = get();
+      const a = await tradingFlowApi.runAnalysis({ symbol, timeframe, capital });
+      set({ analysis: a });
+    } finally {
+      set({ loading: false });
+    }
+  },
+  async generatePlan() {
+    set({ loading: true });
+    try {
+      const { analysis, symbol, timeframe, capital } = get();
+      if (!analysis) throw new Error('Run agents first');
+      const plan = await tradingFlowApi.generateTradePlan({
+        analysisId: analysis.id,
+        symbol,
+        timeframe,
+        capital,
+      });
+      set({ plan });
+    } finally {
+      set({ loading: false });
+    }
+  },
+  async validateRisk(profile: any) {
+    set({ loading: true });
+    try {
+      const { plan } = get();
+      if (!plan) throw new Error('Generate plan first');
+      const risk = await tradingFlowApi.validateTradePlan(plan, profile);
+      set({ risk });
+    } finally {
+      set({ loading: false });
+    }
+  },
+  async approvePaper() {
+    set({ loading: true });
+    try {
+      const { plan, risk } = get();
+      if (!plan || !risk) throw new Error('Missing plan/risk');
+      if (risk.status !== 'ok') throw new Error('Risk not OK');
+      const approval = await tradingFlowApi.approvePaper(plan, risk.id, ['Confirm paper']);
+      set({ approval });
+    } finally {
+      set({ loading: false });
+    }
+  },
+  reset() {
+    set({ analysis: undefined, plan: undefined, risk: undefined, approval: undefined });
+  },
+}));
