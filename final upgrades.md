@@ -191,20 +191,20 @@ From `legacy_original_project7_main/Project7_CryptoBot_Dev/apps/backend`:
 
 If you want live quotes in this pass:
 
-- [ ] Create `apps/backend/src/services/marketData/MarketDataService.ts` using legacy code as reference.
-- [ ] Expose `GET /api/market-data/quotes?symbols=...`.
-- [ ] Use the legacy Polygon guide (`docs/polygon-live-stream.md`) if enabling WebSocket streaming (env vars, reconnect logic).
+- [x] Create `apps/backend/src/services/marketData/MarketDataService.ts` using legacy code as reference.
+- [x] Expose `GET /api/market-data/quotes?symbols=...`.
+- [x] Use the legacy Polygon guide (`docs/polygon-live-stream.md`) if enabling WebSocket streaming (env vars, reconnect logic).
 
-Use this endpoint only to power small “live quotes” widgets on `/dashboard`.
+Use this endpoint only to power small "live quotes" widgets on `/dashboard`.
 
 ### 3.3 Execution skeleton under hard off-switch
 
-- [ ] Port execution logic to `apps/backend/src/services/execution/TradingService.ts` (no direct route).
-- [ ] Create `LiveTradeApprovalService` that:
+- [x] Port execution logic to `apps/backend/src/services/execution/TradingService.ts` (no direct route).
+- [x] Create `LiveTradeApprovalService` that:
   - Checks `BINANCE_TRADING_ENABLED`.
   - Checks `guardrails` (`killSwitch`, `liveEnabled`).
   - Never executes if `BINANCE_TRADING_ENABLED=false`.
-- [ ] Wire `POST /api/trades/approve-live` inside `tradingFlow.ts`, but keep it behind config flags and a minimal UI (or none).
+- [x] Wire `POST /api/trades/approve-live` inside `tradingFlow.ts`, but keep it behind config flags and a minimal UI (or none).
 
 Rules:
 
@@ -293,3 +293,281 @@ At this point you have:
 - Integrate Polygon streaming more deeply if desired (beyond Gate 3’s minimal widget).
 
 > **Gate 5 exit condition:** You have a clear, limited definition of “done” for this merge, plus a clean backlog for everything else. The workspace is stable, tests are green, and you can iterate from a solid paper-trading foundation.
+1. Scope & Guardrails
+
+GPT is a read-only copilot for the current V3 paper-trading SaaS:
+
+Explains the /trading 4-step flow (Run Agents → Plan → Risk → Approve Paper). 
+
+final upgrades
+
+Explains /dashboard cards and portfolio state.
+
+Answers questions about paper trades, portfolio, and risk checks using existing APIs.
+
+GPT must not:
+
+Trigger live trading or bypass BINANCE_TRADING_ENABLED=false. 
+
+final upgrades
+
+Change guardrails or flip any “live” switches.
+
+Only V3 contracts are exposed as Actions:
+
+POST /api/agents/run-analysis
+
+POST /api/agents/generate-trade-plan
+
+POST /api/risk/validate-trade-plan
+
+POST /api/trades/approve-paper
+
+GET /api/portfolio 
+
+final upgrades
+
+2. Backend Implementation (apps/backend)
+2.1. Add GPT Actions schema
+
+Create apps/backend/src/services/ai/gptTools.ts:
+
+Define tools for read-only inspection over the existing paper flow:
+
+get_portfolio_snapshot → wraps GET /api/portfolio.
+
+simulate_analysis → calls run-analysis with safe demo payloads.
+
+simulate_plan → calls generate-trade-plan without approving.
+
+inspect_risk_check → calls validate-trade-plan with a plan ID.
+
+No tool is allowed to:
+
+Call live execution.
+
+Write to PaperStore beyond what the normal paper flow already does.
+
+(These are simple wrappers around the existing routes in tradingFlow.ts, so contracts stay identical. 
+
+final upgrades
+
+)
+
+2.2. Add GPT orchestration service
+
+Create apps/backend/src/services/ai/GptAssistantService.ts:
+
+Accepts:
+
+workspaceId, userId
+
+Natural language question
+
+Optional context: currentRoute (/dashboard vs /trading), current symbol/timeframe.
+
+Builds a message array:
+
+System: “You are a trading SaaS copilot. Explain the existing 4-step paper trading flow and portfolio, never place live trades.”
+
+Context: brief JSON of route + portfolio snapshot (if cheap to fetch).
+
+User: question.
+
+Calls OpenAI with:
+
+The read-only tools from gptTools.ts.
+
+tool_choice: "auto".
+
+Loop:
+
+If GPT calls a tool, execute the mapped wrapper and append results as tool messages.
+
+Stop when GPT returns a normal assistant message.
+
+Return to caller:
+
+answer (markdown).
+
+toolCallLog (which tools were used, status, short summaries).
+
+2.3. Add a single public endpoint
+
+Add POST /api/ai/ask in apps/backend/src/routes/ai.ts (and mount in main router):
+
+Auth:
+
+Same auth middleware as trading routes.
+
+Inject workspaceId and userId from session.
+
+Request body:
+
+question: string
+
+context?: { route?: "/dashboard" | "/trading"; symbol?: string; timeframe?: string }
+
+Response:
+
+answer: string
+
+toolCallLog: Array<{ name, args, status, shortResult | error }>.
+
+2.4. Hard safety checks
+
+Inside GptAssistantService and tool wrappers:
+
+Never trust workspace IDs from GPT:
+
+Always inject workspaceId from auth when calling PaperStore or existing services.
+
+Add explicit runtime guards so GPT cannot touch live flow:
+
+Reject any tool definition whose name suggests approve_live, enable_live, update_guardrail, etc.
+
+Optionally, assert BINANCE_TRADING_ENABLED === false before executing any action, and log if not. 
+
+final upgrades
+
+Example shell actions (adapt to your process):
+
+# From repo root
+cd apps/backend
+
+# Create AI service files
+mkdir -p src/services/ai
+touch src/services/ai/gptTools.ts
+touch src/services/ai/GptAssistantService.ts
+
+# Create AI routes file
+mkdir -p src/routes
+touch src/routes/ai.ts
+
+# Build & run to verify nothing breaks
+npm install
+npm run build
+npm run dev
+
+3. Frontend Implementation (apps/frontend)
+3.1. “Ask GPT” on /dashboard
+
+Inside /dashboard (which is already wired to backend data and portfolio snapshot): 
+
+final upgrades
+
+Add a right-hand or bottom card: “Ask GPT about this account”.
+
+UI elements:
+
+Textarea: question.
+
+Optional toggle: “Include my current portfolio snapshot in context”.
+
+On submit:
+
+Call POST /api/ai/ask with:
+
+question
+
+context.route = "/dashboard"
+
+Render:
+
+Streaming or full answer as markdown.
+
+Collapsible “Data used” panel listing toolCallLog.
+
+3.2. Context-aware GPT on /trading
+
+On /trading (4-step paper flow): 
+
+final upgrades
+
+Add a side panel: “Ask GPT about this step”.
+
+Populate context from the existing store:
+
+Current step (Run Agents, Plan, Risk, or Approve Paper).
+
+Selected symbol, timeframe, and last plan/analysis IDs.
+
+On submit:
+
+Call POST /api/ai/ask with:
+
+question
+
+context including route = "/trading", plus symbol/timeframe.
+
+Render GPT answer near the step, so users can ask:
+
+“What does this risk check mean?”
+
+“Explain the trade plan entries in plain English.”
+
+3.3. Frontend safety & UX rules
+
+Always show a clear note:
+
+“GPT is advisory only and cannot place live trades.”
+
+Do not add any GPT button that says “Execute” / “Trade now”.
+
+Encourage introspective questions:
+
+“Explain this plan / risk / portfolio” vs “Place a trade”.
+
+Example shell actions:
+
+cd apps/frontend
+
+# Ensure deps
+npm install
+
+# Run dev server and iterate on UI
+npm run dev
+
+4. Phased Rollout (Aligned with Existing Gates)
+
+Keep the GPT work aligned with your existing Gate structure so it doesn’t blow up scope. 
+
+final upgrades
+
+Phase A – After Gate 0 & 1 (V3 green + contracts locked)
+
+Only enable Q&A about:
+
+The 4-step paper flow.
+
+Portfolio snapshot.
+
+Tools hit only the same V3 routes already defined in tradingFlow.ts. 
+
+final upgrades
+
+Phase B – After Gate 2 (frontend merge)
+
+Use upgraded /dashboard and /trading visuals to host GPT cards instead of raw JSON. 
+
+final upgrades
+
+Keep GPT strictly read-only, still no live hooks.
+
+Phase C – After Gate 3–4 (optional)
+
+Once market data service and richer quant internals are stable, you can:
+
+Add read-only GPT tools that summarize market data.
+
+Let GPT explain advanced quant signals returned from /analysis and /trade-plan/generate without changing their contracts. 
+
+final upgrades
+
+Phase D – Beyond This Merge (Future Backlog)
+
+Anything where GPT could orchestrate actions (e.g., call live approval routes, tweak risk profiles) stays in the same Future Backlog bucket as “LLM orchestration & SaaS hardening,” not this merge. 
+
+final upgrades
+
+If you tell me your exact backend stack (Express, Nest, FastAPI, etc.), I can turn this into concrete code stubs for gptTools, GptAssistantService, and the /api/ai/ask route tailored to your framework.
