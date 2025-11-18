@@ -17,3 +17,4 @@ All notable changes to this project will be documented in this file.
 
 ### Removed
 - `PROJECT7_V3_FINAL_UPGRADE_GATE_PLAN.md`: Gate content was merged into `final upgrades.md` to avoid duplicated instructions.
+- `Project 7 Main/` legacy tree: deleted redundant copy of `Project7_CryptoBot_Dev` now that `legacy_original_project7_main/Project7_CryptoBot_Dev` remains as the canonical reference.

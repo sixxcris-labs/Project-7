@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@common/*": ["packages/common/src/*"],
-      "@backend/*": ["apps/backend/src/*"]
-    }
-  }
-}
