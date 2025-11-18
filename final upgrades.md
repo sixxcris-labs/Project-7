@@ -230,8 +230,8 @@ In `legacy_original_project7_main/Project7_CryptoBot_Dev/services/quant`:
 
 In `services/quant/app.py`:
 
-- [ ] Keep routes `/analysis` and `/trade-plan/generate`.
-- [ ] Swap internals only (call legacy strategy modules, apply policy logic for sizing/weighting).
+- [x] Keep routes `/analysis` and `/trade-plan/generate`.
+- [x] Swap internals only (call legacy strategy modules, apply policy logic for sizing/weighting).
 
 ### 4.3 Preserve contracts for backend
 
