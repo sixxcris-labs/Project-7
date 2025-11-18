@@ -1,3 +1,4 @@
 node_modules
 *.venv/
 .venv/
+apps/backend/data/

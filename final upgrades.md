@@ -124,22 +124,22 @@ Run the flow once and confirm analysis/plan/risk/approval JSON renders and portf
 
 ### 1.1 Zod contracts at `tradingFlow.ts`
 
-- [ ] All endpoints validated with zod schemas.
-- [ ] Schemas centralized for reuse.
-- [ ] Add small tests or scripts that hit each endpoint with sample payloads (shape validation only).
+- [x] All endpoints validated with zod schemas.
+- [x] Schemas centralized for reuse.
+- [x] Add small tests or scripts that hit each endpoint with sample payloads (shape validation only).
 
 ### 1.2 PaperStore sanity
 
-- [ ] `analyses`, `plans`, `riskChecks`, `approvals` maps exist.
-- [ ] `portfolio` contains `equity`, `positions`, `history`.
-- [ ] `guardrails` includes at least `killSwitch`, `liveEnabled`.
+- [x] `analyses`, `plans`, `riskChecks`, `approvals` maps exist.
+- [x] `portfolio` contains `equity`, `positions`, `history`.
+- [x] `guardrails` includes at least `killSwitch`, `liveEnabled`.
 - [ ] Optional helper: `listTrades()` to read `portfolio.history` for future APIs.
 
 ### 1.3 Quant integration via `MultiAgentService`
 
-- [ ] `runAnalysis` POSTs to `${QUANT_API_URL}/analysis`.
-- [ ] `generatePlan` POSTs to `${QUANT_API_URL}/trade-plan/generate`.
-- [ ] Fallback behavior exists when quant is down.
+- [x] `runAnalysis` POSTs to `${QUANT_API_URL}/analysis`.
+- [x] `generatePlan` POSTs to `${QUANT_API_URL}/trade-plan/generate`.
+- [x] Fallback behavior exists when quant is down.
 
 > **Gate 1 exit condition:** Backend contracts are locked with zod, PaperStore shape is stable, and `MultiAgentService` is the sole caller of the quant API.
 
