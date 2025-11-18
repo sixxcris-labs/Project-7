@@ -288,11 +288,11 @@ At this point you have:
 
 ### 5.5 LLM orchestration & SaaS hardening
 
-- Replace stubs in `MultiAgentService` with LangGraph/LLM pipelines (same response shapes).
-- Add auth (JWT/OAuth2), multi-tenant persistence (database instead of JSON), CI/CD, monitoring, and observability.
-- Integrate Polygon streaming more deeply if desired (beyond Gate 3’s minimal widget).
+  - Replace stubs in `MultiAgentService` with LangGraph/LLM pipelines (same response shapes).
+  - Add auth (JWT/OAuth2), multi-tenant persistence (database instead of JSON), CI/CD, monitoring, and observability.
+  - Integrate Polygon streaming more deeply if desired (beyond Gate 3's minimal widget).
 
-> **Gate 5 exit condition:** You have a clear, limited definition of “done” for this merge, plus a clean backlog for everything else. The workspace is stable, tests are green, and you can iterate from a solid paper-trading foundation.
+> **Gate 5 exit condition:** You have a clear, limited definition of "done" for this merge, plus a clean backlog (`docs/FUTURE_BACKLOG.md`) for everything else. The workspace is stable, tests are green, and you can iterate from a solid paper-trading foundation.
 1. Scope & Guardrails
 
 GPT is a read-only copilot for the current V3 paper-trading SaaS:

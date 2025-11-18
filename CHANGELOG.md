@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - `final upgrades.md`: Marked Gate 2 (legacy UI staging, dashboard/trading upgrades) as complete after adding legacy UI panels, buttons, and styled dashboards that still consume the existing APIs.
 - `final upgrades.md`: Marked Gate 3 (market data endpoint and guarded live execution skeleton) as complete after wiring the market data service and live approval path behind config flags.
 - `final upgrades.md`: Marked Gate 4 (advanced quant logic) as complete after integrating legacy Kelly/Monte Carlo helpers into the quant service and enriching the `/analysis` and `/trade-plan/generate` payloads without breaking contracts.
+- `docs/FUTURE_BACKLOG.md`: Captures the Gate 5 wishlist (risk profiles, trade history, live switch, risk sentinel, LLM/SaaS hardening) so future work stays scoped.
 
 ### Removed
 - `PROJECT7_V3_FINAL_UPGRADE_GATE_PLAN.md`: Gate content was merged into `final upgrades.md` to avoid duplicated instructions.
