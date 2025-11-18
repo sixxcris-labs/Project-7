@@ -32,14 +32,14 @@ Live trading, Polygon streaming, LLM orchestration, Risk Sentinel, and SaaS hard
 
 From repo root (`PROJECT7_V3_complete`):
 
-- [ ] `node -v` → Node 18+
-- [ ] `python --version` → Python 3.10+
-- [ ] `npm install`
+- [x] `node -v` → Node 18+
+- [x] `python --version` → Python 3.10+
+- [x] `npm install`
 
 Env file:
 
-- [ ] Copy `./.env.example` → `./.env`
-- [ ] Set:
+- [x] Copy `./.env.example` → `./.env`
+- [x] Set:
 
   ```env
   NEXT_PUBLIC_BACKEND_URL=http://localhost:3001
@@ -51,9 +51,9 @@ Env file:
 
 Sanity build (whole monorepo):
 
-- [ ] `npm run build`
-- [ ] `apps/backend` builds clean
-- [ ] `apps/frontend` builds clean
+- [x] `npm run build`
+- [x] `apps/backend` builds clean
+- [x] `apps/frontend` builds clean
 
 Fix everything here before changing code.
 
@@ -293,4 +293,3 @@ At this point you have:
 - Integrate Polygon streaming more deeply if desired (beyond Gate 3’s minimal widget).
 
 > **Gate 5 exit condition:** You have a clear, limited definition of “done” for this merge, plus a clean backlog for everything else. The workspace is stable, tests are green, and you can iterate from a solid paper-trading foundation.
-
