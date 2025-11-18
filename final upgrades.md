@@ -61,14 +61,14 @@ Fix everything here before changing code.
 
 In `services/quant`:
 
-- [ ] Create/activate virtualenv
-- [ ] `pip install -r requirements.txt`
-- [ ] `uvicorn app:app --host 0.0.0.0 --port 8100 --reload`
+- [x] Create/activate virtualenv
+- [x] `pip install -r requirements.txt`
+- [x] `uvicorn app:app --host 0.0.0.0 --port 8100 --reload` (verified via FastAPI `TestClient`)
 
 Smoke-test:
 
-- [ ] `POST /analysis` with `{ "symbol": "BTCUSDT", "timeframe": "1h", "capital": 100000 }`
-- [ ] `POST /trade-plan/generate` with `{ "analysisId": "demo-1", "symbol": "BTCUSDT", "timeframe": "1h", "capital": 100000 }`
+- [x] `POST /analysis` with `{ "symbol": "BTCUSDT", "timeframe": "1h", "capital": 100000 }`
+- [x] `POST /trade-plan/generate` with `{ "analysisId": "demo-1", "symbol": "BTCUSDT", "timeframe": "1h", "capital": 100000 }`
 
 Accept if:
 
