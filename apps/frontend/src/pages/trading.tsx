@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Layout from '../components/Layout';
 import { useTradingSession } from '../stores/tradingSessionStore';
 import { DataPanel } from '../legacy-ui';
@@ -6,9 +7,36 @@ import { LegacyButton } from '../legacy-ui';
 export default function Trading() {
   const s = useTradingSession();
 
+  useEffect(() => {
+    s.loadRiskProfiles();
+  }, []);
+
   return (
     <Layout>
       <h1>Trading Flow</h1>
+      <div className="dashboard-grid">
+        <DataPanel title="Risk Profile" state={s.profileLoading ? 'loading' : 'ready'}>
+          <select
+            value={s.selectedProfile?.profile ?? ''}
+            onChange={(e) => {
+              const sel = s.riskProfiles.find((p) => p.profile === e.target.value);
+              if (sel) {
+                s.saveRiskProfile(sel);
+              }
+            }}
+            disabled={s.profileLoading}
+          >
+            <option value="">Select profile</option>
+            {s.riskProfiles.map((p) => (
+              <option key={p.profile} value={p.profile}>
+                {p.profile} · max position {p.maxPositionPct * 100}% · daily {p.maxDailyLossPct * 100}%
+              </option>
+            ))}
+          </select>
+          {s.profileStatus && <p className="panel-hint">{s.profileStatus}</p>}
+        </DataPanel>
+      </div>
+
       <div className="dashboard-grid">
         <DataPanel
           title="1) Run Agents"
@@ -37,9 +65,7 @@ export default function Trading() {
           title="3) Validate Risk"
           state={s.plan ? 'ready' : 'empty'}
           actionLabel="Validate"
-          onAction={() =>
-            s.validateRisk({ profile: 'neutral', maxPositionPct: 0.1, maxDailyLossPct: 0.05, requireKillSwitch: true })
-          }
+          onAction={s.validateRisk}
         >
           {s.risk ? <pre>{JSON.stringify(s.risk, null, 2)}</pre> : <p className="panel-hint">Generate plan first.</p>}
         </DataPanel>

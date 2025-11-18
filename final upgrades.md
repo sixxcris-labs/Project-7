@@ -259,11 +259,11 @@ At this point you have:
 ### 5.1 Risk profiles & user settings
 
 - Backend:
-  - `GET /api/risk/profiles`
-  - `GET /api/risk/user-settings`
-  - `POST /api/risk/user-settings`
+  - [x] `GET /api/risk/profiles`
+  - [x] `GET /api/risk/user-settings`
+  - [x] `POST /api/risk/user-settings`
 - Frontend:
-  - UI to select/persist risk profiles per user/session.
+  - [x] UI to select/persist risk profiles per user/session.
 
 ### 5.2 Trade history endpoint & UI
 

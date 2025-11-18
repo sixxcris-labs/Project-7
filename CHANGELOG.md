@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - `docs/FUTURE_BACKLOG.md`: Captures the Gate 5 wishlist (risk profiles, trade history, live switch, risk sentinel, LLM/SaaS hardening) so future work stays scoped.
 - `final upgrades.md`: Marked Gate 5 (LLM copilot service + GPT tooling) as complete after adding GPT tools, the assistant service, and the `/api/ai/ask` endpoint while keeping GPT strictly read-only.
 - `final upgrades.md`: Added guidance for agent-specific GPT copilots so Analyst, Researcher, Trader, Risk, and PM agents can each invoke tailored system prompts and tool subsets while reusing the safe, read-only APIs.
+- `final upgrades.md`: Risk profile/backlog goals updated to show profile APIs + frontend select are done.
 
 ### Removed
 - `PROJECT7_V3_FINAL_UPGRADE_GATE_PLAN.md`: Gate content was merged into `final upgrades.md` to avoid duplicated instructions.
