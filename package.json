@@ -1,0 +1,12 @@
+{
+  "name": "PROJECT7_V3",
+  "private": true,
+  "workspaces": [
+    "apps/frontend",
+    "apps/backend"
+  ],
+  "scripts": {
+    "build": "npm run -w apps/backend build && npm run -w apps/frontend build",
+    "dev": "echo 'Start each service separately (see README.md)'"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker-compose up:*)",
+      "Bash(docker-compose logs:*)",
+      "Bash(npm install:*)",
+      "Bash(docker-compose restart:*)",
+      "Bash(docker-compose build:*)",
+      "Read(//c/Users/Cristian/Downloads/**)",
+      "Bash(npm run dev:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx kill-port:*)",
+      "Bash(mkdir:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run lint)",
+      "Bash(timeout 10s npm run dev)",
+      "Bash(timeout 15s npm run dev)",
+      "Bash(curl:*)",
+      "Bash(pkill:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(npm run test:*)",
+      "Bash(tasklist)",
+      "Bash(findstr:*)",
+      "Bash(docker system:*)",
+      "Bash(Set-Location \"C:\\Users\\Cristian\\Desktop\\Project 7 Main\")",
+      "Bash(Get-ChildItem -Directory)",
+      "Bash(Select-Object Name, FullName)",
+      "Bash(Set-Location \"C:\\Users\\Cristian\\Desktop\\Project 7 Main\\Project7_CryptoBot_Dev\")",
+      "Read(//c/Users/Cristian/Desktop/Project 7 Main/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

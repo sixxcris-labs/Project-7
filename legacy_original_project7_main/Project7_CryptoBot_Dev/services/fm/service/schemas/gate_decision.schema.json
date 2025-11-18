@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "symbol": {
+      "type": "string"
+    },
+    "context": {
+      "type": "object"
+    },
+    "features": {
+      "type": "object"
+    },
+    "risk_appetite": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "symbol",
+    "context",
+    "features"
+  ]
+}

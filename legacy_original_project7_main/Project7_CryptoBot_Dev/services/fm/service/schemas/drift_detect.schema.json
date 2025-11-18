@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "symbol": {
+      "type": "string"
+    },
+    "ref_distribution": {
+      "type": "object"
+    },
+    "current_distribution": {
+      "type": "object"
+    },
+    "tests": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "symbol",
+    "ref_distribution",
+    "current_distribution"
+  ]
+}

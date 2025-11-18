@@ -1,0 +1,1 @@
+import { useRouter } from 'next/router'; import { useEffect } from 'react'; export default function Index(){ const r=useRouter(); useEffect(()=>{ r.replace('/dashboard'); },[r]); return null; }

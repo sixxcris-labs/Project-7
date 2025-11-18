@@ -1,0 +1,2441 @@
+{
+    "sidebar": [
+        {
+            "id": "nav_dashboard",
+            "label": "Dashboard",
+            "route": "/dashboard",
+            "icon": "dashboard",
+            "visibleForRoles": [
+                "user",
+                "admin"
+            ],
+            "position": "top"
+        },
+        {
+            "id": "nav_markets",
+            "label": "Markets",
+            "route": "/markets",
+            "icon": "candles",
+            "visibleForRoles": [
+                "user",
+                "admin"
+            ],
+            "position": "top"
+        },
+        {
+            "id": "nav_backtesting",
+            "label": "Backtesting",
+            "route": "/backtesting",
+            "icon": "backtest",
+            "visibleForRoles": [
+                "user",
+                "admin"
+            ],
+            "position": "top"
+        },
+        {
+            "id": "nav_strategies",
+            "label": "Strategies (LLM Lab)",
+            "route": "/strategies",
+            "icon": "lab",
+            "visibleForRoles": [
+                "user",
+                "admin"
+            ],
+            "position": "top"
+        },
+        {
+            "id": "nav_whale_watch",
+            "label": "Whale Watch",
+            "route": "/whales",
+            "icon": "whale",
+            "visibleForRoles": [
+                "user",
+                "admin"
+            ],
+            "position": "top"
+        },
+        {
+            "id": "nav_connections",
+            "label": "Connections & Wallets",
+            "route": "/connections",
+            "icon": "link",
+            "visibleForRoles": [
+                "user",
+                "admin"
+            ],
+            "position": "middle"
+        },
+        {
+            "id": "nav_activity",
+            "label": "Activity / Orders",
+            "route": "/activity",
+            "icon": "list",
+            "visibleForRoles": [
+                "user",
+                "admin"
+            ],
+            "position": "middle"
+        },
+        {
+            "id": "nav_settings",
+            "label": "Settings / Profile",
+            "route": "/settings",
+            "icon": "settings",
+            "visibleForRoles": [
+                "user",
+                "admin"
+            ],
+            "position": "bottom"
+        },
+        {
+            "id": "nav_billing",
+            "label": "Payments & Billing",
+            "route": "/billing",
+            "icon": "billing",
+            "visibleForRoles": [
+                "user",
+                "admin"
+            ],
+            "position": "bottom"
+        },
+        {
+            "id": "nav_admin",
+            "label": "Admin / Ops",
+            "route": "/admin",
+            "icon": "shield",
+            "visibleForRoles": [
+                "admin"
+            ],
+            "position": "bottom"
+        }
+    ],
+    "topBar": [
+        {
+            "id": "tb_symbol_search",
+            "type": "search",
+            "label": "Symbol Search",
+            "stateKey": "currentSymbol",
+            "actions": [
+                {
+                    "id": "symbol_search_update",
+                    "type": "setState",
+                    "config": {
+                        "key": "currentSymbol",
+                        "source": "inputValue"
+                    }
+                },
+                {
+                    "id": "symbol_search_refresh_data",
+                    "type": "refetchWidgets",
+                    "config": {
+                        "widgetIds": [
+                            "w_watchlist",
+                            "w_single_market_panel",
+                            "w_order_ticket"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id": "tb_timeframe_selector",
+            "type": "pill-group",
+            "label": "Timeframe",
+            "stateKey": "currentTimeframe",
+            "options": [
+                "1m",
+                "5m",
+                "15m",
+                "1h",
+                "4h",
+                "1d"
+            ],
+            "actions": [
+                {
+                    "id": "timeframe_update",
+                    "type": "setState",
+                    "config": {
+                        "key": "currentTimeframe",
+                        "source": "selectedOption"
+                    }
+                },
+                {
+                    "id": "timeframe_refresh_chart",
+                    "type": "refetchWidgets",
+                    "config": {
+                        "widgetIds": [
+                            "w_single_market_panel",
+                            "w_backtest_summary"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id": "tb_env_mode",
+            "type": "toggle-pill",
+            "label": "Environment Mode",
+            "stateKey": "tradeEnvironment",
+            "options": [
+                "paper",
+                "live"
+            ],
+            "defaultValue": "paper",
+            "actions": [
+                {
+                    "id": "env_mode_update",
+                    "type": "setState",
+                    "config": {
+                        "key": "tradeEnvironment",
+                        "source": "selectedOption"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "tb_live_data_toggle",
+            "type": "toggle-icon",
+            "label": "Live data",
+            "stateKey": "liveDataEnabled",
+            "icons": {
+                "on": "play",
+                "off": "pause"
+            },
+            "actions": [
+                {
+                    "id": "toggle_md_ingestion",
+                    "type": "apiCall",
+                    "config": {
+                        "endpointId": "toggleMarketDataIngestion",
+                        "methodOverride": "POST",
+                        "payloadFromState": {
+                            "enabled": "liveDataEnabled"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": "tb_status_backend",
+            "type": "status-indicator",
+            "label": "Backend",
+            "dataSource": "getHealth",
+            "actions": [
+                {
+                    "id": "open_system_status",
+                    "type": "openDrawer",
+                    "config": {
+                        "drawerId": "system_status_drawer"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "tb_status_market_data",
+            "type": "status-indicator",
+            "label": "Market Data",
+            "dataSource": "getSystemStatus",
+            "actions": [
+                {
+                    "id": "open_system_status_md",
+                    "type": "openDrawer",
+                    "config": {
+                        "drawerId": "system_status_drawer"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "tb_status_exchange",
+            "type": "status-indicator",
+            "label": "Exchange (Binance)",
+            "dataSource": "getSystemStatus",
+            "actions": [
+                {
+                    "id": "open_system_status_exch",
+                    "type": "openDrawer",
+                    "config": {
+                        "drawerId": "system_status_drawer"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "tb_notifications",
+            "type": "icon-badge",
+            "label": "Notifications",
+            "stateKey": "notificationsCount",
+            "actions": [
+                {
+                    "id": "open_notifications_drawer",
+                    "type": "openDrawer",
+                    "config": {
+                        "drawerId": "notifications_drawer"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "tb_user_menu",
+            "type": "avatar-menu",
+            "label": "User Menu",
+            "dataSource": "getProfile",
+            "menuItems": [
+                {
+                    "id": "user_profile",
+                    "label": "Profile",
+                    "action": {
+                        "type": "navigate",
+                        "config": {
+                            "route": "/settings"
+                        }
+                    }
+                },
+                {
+                    "id": "user_timezone",
+                    "label": "Timezone",
+                    "action": {
+                        "type": "openModal",
+                        "config": {
+                            "modalId": "timezone_modal"
+                        }
+                    }
+                },
+                {
+                    "id": "user_logout",
+                    "label": "Logout",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "logout",
+                            "methodOverride": "POST"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "widgets": [
+        {
+            "id": "w_daily_performance",
+            "page": "dashboard",
+            "section": "topStrip",
+            "title": "Daily Performance",
+            "dataSources": [
+                {
+                    "id": "main",
+                    "endpointId": "getPerformanceSummary"
+                }
+            ],
+            "metrics": [
+                {
+                    "id": "today_pnl_usd",
+                    "label": "Today PnL (USD)"
+                },
+                {
+                    "id": "today_pnl_pct",
+                    "label": "Today PnL (%) vs yesterday equity"
+                },
+                {
+                    "id": "weekly_pnl_usd",
+                    "label": "Weekly PnL (USD)"
+                },
+                {
+                    "id": "weekly_pnl_pct",
+                    "label": "Weekly PnL (%)"
+                },
+                {
+                    "id": "win_rate_today",
+                    "label": "Win rate today (%)"
+                },
+                {
+                    "id": "trades_today",
+                    "label": "Number of trades today"
+                },
+                {
+                    "id": "risk_used_pct",
+                    "label": "Risk used today vs daily budget (%)"
+                },
+                {
+                    "id": "equity_vs_ath_pct",
+                    "label": "Current equity vs ATH (%)"
+                },
+                {
+                    "id": "max_drawdown_today_pct",
+                    "label": "Max drawdown today (%)"
+                },
+                {
+                    "id": "current_streak",
+                    "label": "Current streak (+N/-N)"
+                }
+            ],
+            "controls": [
+                {
+                    "id": "dp_range_today",
+                    "type": "pill",
+                    "label": "Today",
+                    "action": {
+                        "type": "setState",
+                        "config": {
+                            "key": "dp_range",
+                            "value": "today"
+                        }
+                    }
+                },
+                {
+                    "id": "dp_range_week",
+                    "type": "pill",
+                    "label": "This Week",
+                    "action": {
+                        "type": "setState",
+                        "config": {
+                            "key": "dp_range",
+                            "value": "week"
+                        }
+                    }
+                },
+                {
+                    "id": "dp_range_month",
+                    "type": "pill",
+                    "label": "This Month",
+                    "action": {
+                        "type": "setState",
+                        "config": {
+                            "key": "dp_range",
+                            "value": "month"
+                        }
+                    }
+                },
+                {
+                    "id": "dp_show_trade_list",
+                    "type": "button",
+                    "label": "Show trade list",
+                    "action": {
+                        "type": "navigate",
+                        "config": {
+                            "route": "/activity",
+                            "query": {
+                                "rangeFromWidget": "dp_range"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "dp_adjust_risk_budget",
+                    "type": "button-secondary",
+                    "label": "Adjust risk budget",
+                    "action": {
+                        "type": "navigate",
+                        "config": {
+                            "route": "/settings",
+                            "hash": "#risk"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": "w_mind_safety",
+            "page": "dashboard",
+            "section": "topStrip",
+            "title": "Mind Safety / Guardrails",
+            "dataSources": [
+                {
+                    "id": "main",
+                    "endpointId": "getGuardrailsState"
+                }
+            ],
+            "metrics": [
+                {
+                    "id": "daily_trade_limit_used",
+                    "label": "Daily trade limit used"
+                },
+                {
+                    "id": "daily_trade_limit_max",
+                    "label": "Daily trade limit max"
+                },
+                {
+                    "id": "max_position_size_pct",
+                    "label": "Max allowed position size (% of account)"
+                },
+                {
+                    "id": "largest_position_today_pct",
+                    "label": "Largest position today (% of account)"
+                },
+                {
+                    "id": "behavior_flag",
+                    "label": "LLM behavior flag"
+                }
+            ],
+            "controls": [
+                {
+                    "id": "ms_guardrails_toggle",
+                    "type": "toggle",
+                    "label": "Behavioral guardrails",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "updateGuardrailsState",
+                            "methodOverride": "POST",
+                            "payloadFromState": {
+                                "enabled": "guardrailsEnabled"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "ms_explain_warning",
+                    "type": "button-link",
+                    "label": "Explain this warning",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "explainGuardrailsWarning",
+                            "methodOverride": "POST"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": "w_watchlist",
+            "page": "dashboard",
+            "section": "marketsBand",
+            "title": "Watchlist",
+            "dataSources": [
+                {
+                    "id": "main",
+                    "endpointId": "getWatchlist"
+                }
+            ],
+            "metrics": [
+                {
+                    "id": "symbol",
+                    "label": "Symbol"
+                },
+                {
+                    "id": "last_price",
+                    "label": "Last price"
+                },
+                {
+                    "id": "change_24h_pct",
+                    "label": "24h change (%)"
+                },
+                {
+                    "id": "high_24h",
+                    "label": "24h high"
+                },
+                {
+                    "id": "low_24h",
+                    "label": "24h low"
+                },
+                {
+                    "id": "volume_24h",
+                    "label": "24h volume"
+                },
+                {
+                    "id": "spread_bps",
+                    "label": "Bid/ask spread (bps)"
+                },
+                {
+                    "id": "orderbook_imbalance_pct",
+                    "label": "Order book imbalance (%)"
+                },
+                {
+                    "id": "rv_1d",
+                    "label": "1d realized volatility"
+                },
+                {
+                    "id": "market_status",
+                    "label": "Market status"
+                }
+            ],
+            "controls": [
+                {
+                    "id": "wl_add_to_watchlist",
+                    "type": "button",
+                    "label": "+ Add",
+                    "action": {
+                        "type": "openModal",
+                        "config": {
+                            "modalId": "add_watchlist_symbol_modal"
+                        }
+                    }
+                },
+                {
+                    "id": "wl_row_star",
+                    "type": "row-action-toggle",
+                    "label": "Favorite",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "updateWatchlist",
+                            "methodOverride": "POST"
+                        }
+                    }
+                },
+                {
+                    "id": "wl_row_open_chart",
+                    "type": "row-action",
+                    "label": "Open in chart",
+                    "action": {
+                        "type": "setState",
+                        "config": {
+                            "key": "currentSymbol",
+                            "source": "row.symbol"
+                        }
+                    }
+                },
+                {
+                    "id": "wl_row_create_alert",
+                    "type": "row-action",
+                    "label": "Alert",
+                    "action": {
+                        "type": "openModal",
+                        "config": {
+                            "modalId": "create_price_alert_modal",
+                            "prefillFromRow": true
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": "w_single_market_panel",
+            "page": "dashboard",
+            "section": "marketsBand",
+            "title": "Market View",
+            "dataSources": [
+                {
+                    "id": "chart",
+                    "endpointId": "getChartData"
+                },
+                {
+                    "id": "orderbook",
+                    "endpointId": "getOrderBook"
+                },
+                {
+                    "id": "trades",
+                    "endpointId": "getTrades"
+                }
+            ],
+            "subcomponents": [
+                {
+                    "id": "smp_chart",
+                    "type": "chart",
+                    "metrics": [
+                        {
+                            "id": "ohlc",
+                            "label": "OHLC candlesticks"
+                        },
+                        {
+                            "id": "volume",
+                            "label": "Volume bars"
+                        },
+                        {
+                            "id": "ma_20",
+                            "label": "MA 20"
+                        },
+                        {
+                            "id": "ma_50",
+                            "label": "MA 50"
+                        },
+                        {
+                            "id": "vwap",
+                            "label": "VWAP"
+                        },
+                        {
+                            "id": "price_change_pct",
+                            "label": "Price change (%)"
+                        }
+                    ],
+                    "controls": [
+                        {
+                            "id": "smp_tf_local",
+                            "type": "pill-group",
+                            "label": "Timeframe",
+                            "options": [
+                                "1m",
+                                "5m",
+                                "15m",
+                                "1h",
+                                "4h",
+                                "1d"
+                            ],
+                            "action": {
+                                "type": "setState",
+                                "config": {
+                                    "key": "chart_timeframe",
+                                    "source": "selectedOption"
+                                }
+                            }
+                        },
+                        {
+                            "id": "smp_overlay_ma",
+                            "type": "toggle",
+                            "label": "MA",
+                            "action": {
+                                "type": "setState",
+                                "config": {
+                                    "key": "chart_overlay_ma",
+                                    "value": true
+                                }
+                            }
+                        },
+                        {
+                            "id": "smp_overlay_vwap",
+                            "type": "toggle",
+                            "label": "VWAP",
+                            "action": {
+                                "type": "setState",
+                                "config": {
+                                    "key": "chart_overlay_vwap",
+                                    "value": true
+                                }
+                            }
+                        },
+                        {
+                            "id": "smp_scale_toggle",
+                            "type": "toggle",
+                            "label": "Log scale",
+                            "action": {
+                                "type": "setState",
+                                "config": {
+                                    "key": "chart_scale",
+                                    "value": "log"
+                                }
+                            }
+                        },
+                        {
+                            "id": "smp_fullscreen",
+                            "type": "button-icon",
+                            "label": "Full screen",
+                            "action": {
+                                "type": "openFullscreen",
+                                "config": {
+                                    "componentId": "smp_chart"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": "smp_orderbook",
+                    "type": "orderbook",
+                    "metrics": [
+                        {
+                            "id": "bids",
+                            "label": "Bids"
+                        },
+                        {
+                            "id": "asks",
+                            "label": "Asks"
+                        },
+                        {
+                            "id": "best_bid",
+                            "label": "Best bid"
+                        },
+                        {
+                            "id": "best_ask",
+                            "label": "Best ask"
+                        },
+                        {
+                            "id": "mid_price",
+                            "label": "Mid price"
+                        },
+                        {
+                            "id": "spread_abs",
+                            "label": "Spread (absolute)"
+                        },
+                        {
+                            "id": "spread_bps",
+                            "label": "Spread (bps)"
+                        }
+                    ],
+                    "controls": [
+                        {
+                            "id": "smp_ob_view_toggle",
+                            "type": "toggle",
+                            "label": "Ladder / Depth",
+                            "action": {
+                                "type": "setState",
+                                "config": {
+                                    "key": "orderbook_view",
+                                    "source": "selectedOption"
+                                }
+                            }
+                        },
+                        {
+                            "id": "smp_ob_depth_range",
+                            "type": "pill-group",
+                            "label": "Depth range",
+                            "options": [
+                                "0.5%",
+                                "1%",
+                                "2%"
+                            ],
+                            "action": {
+                                "type": "setState",
+                                "config": {
+                                    "key": "orderbook_depth_range",
+                                    "source": "selectedOption"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": "smp_trades_tape",
+                    "type": "table",
+                    "metrics": [
+                        {
+                            "id": "time",
+                            "label": "Time"
+                        },
+                        {
+                            "id": "price",
+                            "label": "Price"
+                        },
+                        {
+                            "id": "size",
+                            "label": "Size"
+                        },
+                        {
+                            "id": "side",
+                            "label": "Side"
+                        },
+                        {
+                            "id": "notional",
+                            "label": "Notional"
+                        }
+                    ],
+                    "controls": [
+                        {
+                            "id": "smp_tape_big_prints",
+                            "type": "toggle",
+                            "label": "Only big prints",
+                            "action": {
+                                "type": "setState",
+                                "config": {
+                                    "key": "tape_big_prints_only",
+                                    "value": true
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "w_order_ticket",
+            "page": "dashboard",
+            "section": "marketsBand",
+            "title": "Order Simulation (Paper)",
+            "dataSources": [
+                {
+                    "id": "risk",
+                    "endpointId": "getGuardrailsState"
+                }
+            ],
+            "metrics": [
+                {
+                    "id": "order_notional_usd",
+                    "label": "Order notional (USD)"
+                },
+                {
+                    "id": "projected_risk_pct",
+                    "label": "Projected risk vs daily budget"
+                },
+                {
+                    "id": "expected_slippage_pct",
+                    "label": "Expected slippage (%)"
+                }
+            ],
+            "controls": [
+                {
+                    "id": "ot_side",
+                    "type": "toggle-pill",
+                    "label": "Side",
+                    "options": [
+                        "Buy",
+                        "Sell"
+                    ]
+                },
+                {
+                    "id": "ot_symbol",
+                    "type": "symbol-selector",
+                    "label": "Symbol",
+                    "binding": "currentSymbol"
+                },
+                {
+                    "id": "ot_order_type",
+                    "type": "dropdown",
+                    "label": "Order type",
+                    "options": [
+                        "Market",
+                        "Limit"
+                    ]
+                },
+                {
+                    "id": "ot_quantity",
+                    "type": "number-input",
+                    "label": "Quantity"
+                },
+                {
+                    "id": "ot_quick_pct_25",
+                    "type": "button-pill",
+                    "label": "25%",
+                    "action": {
+                        "type": "setState",
+                        "config": {
+                            "key": "ot_quantity_pct",
+                            "value": 25
+                        }
+                    }
+                },
+                {
+                    "id": "ot_quick_pct_50",
+                    "type": "button-pill",
+                    "label": "50%",
+                    "action": {
+                        "type": "setState",
+                        "config": {
+                            "key": "ot_quantity_pct",
+                            "value": 50
+                        }
+                    }
+                },
+                {
+                    "id": "ot_quick_pct_100",
+                    "type": "button-pill",
+                    "label": "100%",
+                    "action": {
+                        "type": "setState",
+                        "config": {
+                            "key": "ot_quantity_pct",
+                            "value": 100
+                        }
+                    }
+                },
+                {
+                    "id": "ot_price",
+                    "type": "number-input",
+                    "label": "Price (Limit only)"
+                },
+                {
+                    "id": "ot_tif",
+                    "type": "dropdown",
+                    "label": "Time in force",
+                    "options": [
+                        "GTC",
+                        "IOC"
+                    ]
+                },
+                {
+                    "id": "ot_use_risk_unit",
+                    "type": "toggle",
+                    "label": "Use risk unit"
+                },
+                {
+                    "id": "ot_place_paper_trade",
+                    "type": "button-primary",
+                    "label": "Place paper trade",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "placePaperOrder",
+                            "methodOverride": "POST"
+                        }
+                    }
+                },
+                {
+                    "id": "ot_simulate_fill",
+                    "type": "button-secondary",
+                    "label": "Simulate fill",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "simulatePaperFill",
+                            "methodOverride": "POST"
+                        }
+                    }
+                },
+                {
+                    "id": "ot_clear",
+                    "type": "button-ghost",
+                    "label": "Clear",
+                    "action": {
+                        "type": "resetForm",
+                        "config": {
+                            "formId": "order_ticket_form"
+                        }
+                    }
+                },
+                {
+                    "id": "ot_send_to_backtest",
+                    "type": "button-link",
+                    "label": "Send this to backtest",
+                    "action": {
+                        "type": "navigate",
+                        "config": {
+                            "route": "/backtesting",
+                            "query": {
+                                "fromOrderTicket": true
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": "w_whale_watch",
+            "page": "dashboard",
+            "section": "whaleBand",
+            "title": "Polymarket Whales",
+            "dataSources": [
+                {
+                    "id": "whales",
+                    "endpointId": "getWhales"
+                }
+            ],
+            "metrics": [
+                {
+                    "id": "wallet",
+                    "label": "Wallet address"
+                },
+                {
+                    "id": "total_notional",
+                    "label": "Total notional traded"
+                },
+                {
+                    "id": "last_seen",
+                    "label": "Last seen"
+                },
+                {
+                    "id": "markets_count",
+                    "label": "# markets traded"
+                },
+                {
+                    "id": "explorer_url",
+                    "label": "Explorer URL"
+                }
+            ],
+            "controls": [
+                {
+                    "id": "ww_range_1h",
+                    "type": "pill",
+                    "label": "Last 1h"
+                },
+                {
+                    "id": "ww_range_24h",
+                    "type": "pill",
+                    "label": "Last 24h"
+                },
+                {
+                    "id": "ww_auto_refresh",
+                    "type": "auto-refresh",
+                    "label": "Auto-refresh 15s"
+                },
+                {
+                    "id": "ww_row_expand",
+                    "type": "row-action",
+                    "label": "Expand",
+                    "action": {
+                        "type": "toggleRowExpand"
+                    }
+                },
+                {
+                    "id": "ww_row_view_explorer",
+                    "type": "row-action-link",
+                    "label": "View",
+                    "action": {
+                        "type": "openExternal",
+                        "config": {
+                            "urlSource": "row.explorer_url"
+                        }
+                    }
+                }
+            ],
+            "expandedViewMetrics": [
+                {
+                    "id": "trade_time",
+                    "label": "Time"
+                },
+                {
+                    "id": "trade_market_id",
+                    "label": "Market ID"
+                },
+                {
+                    "id": "trade_side",
+                    "label": "Side"
+                },
+                {
+                    "id": "trade_price",
+                    "label": "Price"
+                },
+                {
+                    "id": "trade_size",
+                    "label": "Size"
+                },
+                {
+                    "id": "trade_notional",
+                    "label": "Notional"
+                }
+            ]
+        },
+        {
+            "id": "w_backtest_summary",
+            "page": "dashboard",
+            "section": "bottomBand",
+            "title": "Backtest Summary",
+            "dataSources": [
+                {
+                    "id": "latest",
+                    "endpointId": "getBacktestSummary"
+                }
+            ],
+            "metrics": [
+                {
+                    "id": "strategy_name",
+                    "label": "Strategy name"
+                },
+                {
+                    "id": "data_range",
+                    "label": "Data range"
+                },
+                {
+                    "id": "net_return_pct",
+                    "label": "Net return (%)"
+                },
+                {
+                    "id": "max_drawdown_pct",
+                    "label": "Max drawdown (%)"
+                },
+                {
+                    "id": "sharpe",
+                    "label": "Sharpe / risk-adjusted score"
+                },
+                {
+                    "id": "win_rate_pct",
+                    "label": "Win rate (%)"
+                },
+                {
+                    "id": "trades_count",
+                    "label": "Number of trades"
+                },
+                {
+                    "id": "profit_factor",
+                    "label": "Profit factor"
+                },
+                {
+                    "id": "avg_r_per_trade",
+                    "label": "Avg R per trade"
+                },
+                {
+                    "id": "equity_sparkline",
+                    "label": "Equity curve sparkline"
+                },
+                {
+                    "id": "dd_sparkline",
+                    "label": "Drawdown sparkline"
+                }
+            ],
+            "controls": [
+                {
+                    "id": "bt_run_backtest",
+                    "type": "button-primary",
+                    "label": "Run backtest",
+                    "action": {
+                        "type": "navigate",
+                        "config": {
+                            "route": "/backtesting",
+                            "query": {
+                                "mode": "newRun"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "bt_compare",
+                    "type": "button-secondary",
+                    "label": "Compare",
+                    "action": {
+                        "type": "navigate",
+                        "config": {
+                            "route": "/backtesting",
+                            "query": {
+                                "mode": "compare"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "bt_open_details",
+                    "type": "button-link",
+                    "label": "Open details",
+                    "action": {
+                        "type": "navigate",
+                        "config": {
+                            "route": "/backtesting"
+                        }
+                    }
+                },
+                {
+                    "id": "bt_export",
+                    "type": "button-ghost",
+                    "label": "Export",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "exportBacktest",
+                            "methodOverride": "GET"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": "w_news_new_coins",
+            "page": "dashboard",
+            "section": "bottomBand",
+            "title": "New Coins & News",
+            "dataSources": [
+                {
+                    "id": "new_coins",
+                    "endpointId": "getNewCoins"
+                },
+                {
+                    "id": "news",
+                    "endpointId": "getNews"
+                }
+            ],
+            "subcomponents": [
+                {
+                    "id": "nc_new_coins",
+                    "type": "table",
+                    "metrics": [
+                        {
+                            "id": "token_name",
+                            "label": "Token name"
+                        },
+                        {
+                            "id": "symbol",
+                            "label": "Symbol"
+                        },
+                        {
+                            "id": "launch_date",
+                            "label": "Launch date"
+                        },
+                        {
+                            "id": "market_cap",
+                            "label": "Market cap"
+                        },
+                        {
+                            "id": "volume_24h",
+                            "label": "24h volume"
+                        },
+                        {
+                            "id": "price_change_since_listing_pct",
+                            "label": "Price since listing (%)"
+                        },
+                        {
+                            "id": "whitepaper_score",
+                            "label": "Whitepaper score"
+                        },
+                        {
+                            "id": "tokenomics_risk",
+                            "label": "Tokenomics risk"
+                        },
+                        {
+                            "id": "team_score",
+                            "label": "Team credibility"
+                        },
+                        {
+                            "id": "risk_label",
+                            "label": "Risk label"
+                        }
+                    ],
+                    "controls": [
+                        {
+                            "id": "nc_analyze_whitepaper",
+                            "type": "row-action",
+                            "label": "Analyze whitepaper",
+                            "action": {
+                                "type": "apiCall",
+                                "config": {
+                                    "endpointId": "analyzeWhitepaper",
+                                    "methodOverride": "POST"
+                                }
+                            }
+                        },
+                        {
+                            "id": "nc_add_to_watchlist",
+                            "type": "row-action",
+                            "label": "Add to watchlist",
+                            "action": {
+                                "type": "apiCall",
+                                "config": {
+                                    "endpointId": "updateWatchlist",
+                                    "methodOverride": "POST"
+                                }
+                            }
+                        },
+                        {
+                            "id": "nc_ignore_coin",
+                            "type": "row-action",
+                            "label": "Ignore",
+                            "action": {
+                                "type": "setRowHidden"
+                            }
+                        },
+                        {
+                            "id": "nc_explain_interest",
+                            "type": "row-action",
+                            "label": "Explain why interesting",
+                            "action": {
+                                "type": "apiCall",
+                                "config": {
+                                    "endpointId": "explainCoin",
+                                    "methodOverride": "POST"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": "nw_drop_sniper",
+                    "type": "list",
+                    "metrics": [
+                        {
+                            "id": "headline",
+                            "label": "Headline"
+                        },
+                        {
+                            "id": "source",
+                            "label": "Source"
+                        },
+                        {
+                            "id": "time",
+                            "label": "Time"
+                        },
+                        {
+                            "id": "affected_coins",
+                            "label": "Affected coins"
+                        },
+                        {
+                            "id": "sentiment",
+                            "label": "Sentiment"
+                        },
+                        {
+                            "id": "impact_score",
+                            "label": "Impact score"
+                        },
+                        {
+                            "id": "drop_watch_status",
+                            "label": "Drop watch"
+                        }
+                    ],
+                    "controls": [
+                        {
+                            "id": "nw_watch_for_dip",
+                            "type": "row-action",
+                            "label": "Watch for dip",
+                            "action": {
+                                "type": "apiCall",
+                                "config": {
+                                    "endpointId": "createDropWatch",
+                                    "methodOverride": "POST"
+                                }
+                            }
+                        },
+                        {
+                            "id": "nw_add_to_backtest",
+                            "type": "row-action",
+                            "label": "Add to backtest",
+                            "action": {
+                                "type": "navigate",
+                                "config": {
+                                    "route": "/backtesting",
+                                    "query": {
+                                        "fromNewsEvent": true
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "id": "nw_mute_similar",
+                            "type": "row-action",
+                            "label": "Mute similar",
+                            "action": {
+                                "type": "apiCall",
+                                "config": {
+                                    "endpointId": "muteNewsTopic",
+                                    "methodOverride": "POST"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "w_connections_list",
+            "page": "connections",
+            "section": "main",
+            "title": "Connections",
+            "dataSources": [
+                {
+                    "id": "connections",
+                    "endpointId": "getConnections"
+                }
+            ],
+            "metrics": [
+                {
+                    "id": "exchange",
+                    "label": "Exchange"
+                },
+                {
+                    "id": "label",
+                    "label": "Label"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                },
+                {
+                    "id": "last_checked",
+                    "label": "Last checked"
+                }
+            ],
+            "controls": [
+                {
+                    "id": "conn_add",
+                    "type": "button-primary",
+                    "label": "Add connection",
+                    "action": {
+                        "type": "openModal",
+                        "config": {
+                            "modalId": "add_connection_modal"
+                        }
+                    }
+                },
+                {
+                    "id": "conn_edit",
+                    "type": "row-action",
+                    "label": "Edit",
+                    "action": {
+                        "type": "openModal",
+                        "config": {
+                            "modalId": "edit_connection_modal",
+                            "prefillFromRow": true
+                        }
+                    }
+                },
+                {
+                    "id": "conn_revalidate",
+                    "type": "row-action",
+                    "label": "Revalidate",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "revalidateConnection",
+                            "methodOverride": "POST"
+                        }
+                    }
+                },
+                {
+                    "id": "conn_delete",
+                    "type": "row-action-danger",
+                    "label": "Delete",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "deleteConnection",
+                            "methodOverride": "DELETE"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": "w_wallet_balances",
+            "page": "connections",
+            "section": "main",
+            "title": "Wallet & Balances",
+            "dataSources": [
+                {
+                    "id": "balances",
+                    "endpointId": "getBalances"
+                }
+            ],
+            "metrics": [
+                {
+                    "id": "total_portfolio_usd",
+                    "label": "Total portfolio (USD)"
+                },
+                {
+                    "id": "per_exchange",
+                    "label": "Per-exchange balances"
+                },
+                {
+                    "id": "per_asset",
+                    "label": "Per-asset balances"
+                },
+                {
+                    "id": "stable_vs_volatile_pct",
+                    "label": "Stable vs volatile (%)"
+                },
+                {
+                    "id": "unrealized_pnl",
+                    "label": "Unrealized PnL"
+                },
+                {
+                    "id": "realized_pnl",
+                    "label": "Realized PnL"
+                }
+            ],
+            "controls": [
+                {
+                    "id": "wb_hide_small",
+                    "type": "toggle",
+                    "label": "Hide small balances"
+                },
+                {
+                    "id": "wb_group_by",
+                    "type": "dropdown",
+                    "label": "Group by",
+                    "options": [
+                        "exchange",
+                        "asset"
+                    ]
+                },
+                {
+                    "id": "wb_export",
+                    "type": "button-ghost",
+                    "label": "Export balances",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "exportBalances",
+                            "methodOverride": "GET"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": "w_activity_orders",
+            "page": "activity",
+            "section": "main",
+            "title": "Activity / Orders",
+            "dataSources": [
+                {
+                    "id": "activity",
+                    "endpointId": "getActivity"
+                }
+            ],
+            "metrics": [
+                {
+                    "id": "timestamp",
+                    "label": "Timestamp"
+                },
+                {
+                    "id": "symbol",
+                    "label": "Symbol"
+                },
+                {
+                    "id": "side",
+                    "label": "Side"
+                },
+                {
+                    "id": "quantity",
+                    "label": "Quantity"
+                },
+                {
+                    "id": "price",
+                    "label": "Price"
+                },
+                {
+                    "id": "fees",
+                    "label": "Fees"
+                },
+                {
+                    "id": "realized_pnl",
+                    "label": "Realized PnL"
+                },
+                {
+                    "id": "env_tag",
+                    "label": "Paper / Live"
+                },
+                {
+                    "id": "strategy_name",
+                    "label": "Strategy name"
+                }
+            ],
+            "controls": [
+                {
+                    "id": "ao_filter_symbol",
+                    "type": "symbol-filter",
+                    "label": "Symbol"
+                },
+                {
+                    "id": "ao_filter_date_range",
+                    "type": "date-range",
+                    "label": "Date range"
+                },
+                {
+                    "id": "ao_filter_side",
+                    "type": "dropdown",
+                    "label": "Side",
+                    "options": [
+                        "All",
+                        "Buy",
+                        "Sell"
+                    ]
+                },
+                {
+                    "id": "ao_filter_strategy",
+                    "type": "dropdown",
+                    "label": "Strategy"
+                },
+                {
+                    "id": "ao_filter_pnl_sign",
+                    "type": "dropdown",
+                    "label": "PnL",
+                    "options": [
+                        "All",
+                        "Win",
+                        "Loss"
+                    ]
+                },
+                {
+                    "id": "ao_export",
+                    "type": "button-ghost",
+                    "label": "Export CSV",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "exportActivity",
+                            "methodOverride": "GET"
+                        }
+                    }
+                },
+                {
+                    "id": "ao_replay_in_backtest",
+                    "type": "row-action",
+                    "label": "Replay in backtest",
+                    "action": {
+                        "type": "navigate",
+                        "config": {
+                            "route": "/backtesting",
+                            "query": {
+                                "fromActivityRange": true
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": "w_billing",
+            "page": "billing",
+            "section": "main",
+            "title": "Payments & Billing",
+            "dataSources": [
+                {
+                    "id": "billing",
+                    "endpointId": "getBilling"
+                }
+            ],
+            "metrics": [
+                {
+                    "id": "current_plan",
+                    "label": "Current plan"
+                },
+                {
+                    "id": "next_billing_date",
+                    "label": "Next billing date"
+                },
+                {
+                    "id": "monthly_usage",
+                    "label": "Monthly usage"
+                },
+                {
+                    "id": "past_invoices",
+                    "label": "Past invoices"
+                }
+            ],
+            "controls": [
+                {
+                    "id": "bill_update_payment_method",
+                    "type": "button-primary",
+                    "label": "Update payment method",
+                    "action": {
+                        "type": "openModal",
+                        "config": {
+                            "modalId": "update_payment_method_modal"
+                        }
+                    }
+                },
+                {
+                    "id": "bill_view_invoices",
+                    "type": "button-secondary",
+                    "label": "View invoices",
+                    "action": {
+                        "type": "openModal",
+                        "config": {
+                            "modalId": "invoices_modal"
+                        }
+                    }
+                },
+                {
+                    "id": "bill_change_plan",
+                    "type": "button-secondary",
+                    "label": "Change plan",
+                    "action": {
+                        "type": "openModal",
+                        "config": {
+                            "modalId": "change_plan_modal"
+                        }
+                    }
+                },
+                {
+                    "id": "bill_cancel_subscription",
+                    "type": "button-danger",
+                    "label": "Cancel subscription",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "cancelSubscription",
+                            "methodOverride": "POST"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": "w_settings_profile",
+            "page": "settings",
+            "section": "main",
+            "title": "Profile & Settings",
+            "dataSources": [
+                {
+                    "id": "profile",
+                    "endpointId": "getProfile"
+                }
+            ],
+            "metrics": [
+                {
+                    "id": "name",
+                    "label": "Name"
+                },
+                {
+                    "id": "email",
+                    "label": "Email"
+                },
+                {
+                    "id": "timezone",
+                    "label": "Timezone"
+                },
+                {
+                    "id": "notification_prefs",
+                    "label": "Notification preferences"
+                },
+                {
+                    "id": "daily_risk",
+                    "label": "Daily risk"
+                },
+                {
+                    "id": "max_position_size",
+                    "label": "Max position size"
+                }
+            ],
+            "controls": [
+                {
+                    "id": "sp_update_profile",
+                    "type": "button-primary",
+                    "label": "Update profile",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "updateProfile",
+                            "methodOverride": "POST"
+                        }
+                    }
+                },
+                {
+                    "id": "sp_change_password",
+                    "type": "button-secondary",
+                    "label": "Change password",
+                    "action": {
+                        "type": "navigate",
+                        "config": {
+                            "route": "/auth/change-password"
+                        }
+                    }
+                },
+                {
+                    "id": "sp_save_notifications",
+                    "type": "button-secondary",
+                    "label": "Save notification preferences",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "updateNotificationPreferences",
+                            "methodOverride": "POST"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": "w_admin_ops",
+            "page": "admin",
+            "section": "main",
+            "title": "Admin / Ops Dashboard",
+            "dataSources": [
+                {
+                    "id": "adminMetrics",
+                    "endpointId": "getAdminMetrics"
+                }
+            ],
+            "metrics": [
+                {
+                    "id": "health_status",
+                    "label": "Backend health"
+                },
+                {
+                    "id": "request_rate",
+                    "label": "Request rate"
+                },
+                {
+                    "id": "error_rate",
+                    "label": "Error rate"
+                },
+                {
+                    "id": "latency_p95",
+                    "label": "Latency P95"
+                },
+                {
+                    "id": "latency_p99",
+                    "label": "Latency P99"
+                },
+                {
+                    "id": "md_ingestion_lag",
+                    "label": "MD ingestion lag"
+                },
+                {
+                    "id": "md_transport_mode",
+                    "label": "MD transport mode"
+                },
+                {
+                    "id": "ws_reconnect_count",
+                    "label": "WS reconnects"
+                },
+                {
+                    "id": "backtest_queue_depth",
+                    "label": "Backtest queue depth"
+                },
+                {
+                    "id": "backtest_success_ratio",
+                    "label": "Backtest success ratio"
+                },
+                {
+                    "id": "feature_flags",
+                    "label": "Feature flags"
+                }
+            ],
+            "controls": [
+                {
+                    "id": "admin_toggle_live_data",
+                    "type": "button-toggle",
+                    "label": "Toggle Live Data",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "toggleMarketDataIngestion",
+                            "methodOverride": "POST"
+                        }
+                    }
+                },
+                {
+                    "id": "admin_toggle_feature_flag",
+                    "type": "row-action",
+                    "label": "Toggle feature",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "toggleFeatureFlag",
+                            "methodOverride": "POST"
+                        }
+                    }
+                },
+                {
+                    "id": "admin_open_prometheus",
+                    "type": "button-link",
+                    "label": "Open Prometheus",
+                    "action": {
+                        "type": "openExternal",
+                        "config": {
+                            "url": "PROMETHEUS_URL_ENV"
+                        }
+                    }
+                },
+                {
+                    "id": "admin_open_grafana",
+                    "type": "button-link",
+                    "label": "Open Grafana",
+                    "action": {
+                        "type": "openExternal",
+                        "config": {
+                            "url": "GRAFANA_URL_ENV"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": "w_backtesting_page",
+            "page": "backtesting",
+            "section": "main",
+            "title": "Backtesting Engine",
+            "dataSources": [
+                {
+                    "id": "backtests",
+                    "endpointId": "listBacktests"
+                }
+            ],
+            "metrics": [
+                {
+                    "id": "equity_curve",
+                    "label": "Equity curve"
+                },
+                {
+                    "id": "drawdown_curve",
+                    "label": "Drawdown curve"
+                },
+                {
+                    "id": "pnl_histogram",
+                    "label": "PnL histogram"
+                },
+                {
+                    "id": "trades_count",
+                    "label": "Trades count"
+                },
+                {
+                    "id": "win_rate_pct",
+                    "label": "Win rate (%)"
+                },
+                {
+                    "id": "avg_holding_period",
+                    "label": "Average holding period"
+                },
+                {
+                    "id": "exposure_pct",
+                    "label": "Exposure (%)"
+                },
+                {
+                    "id": "max_order_gap",
+                    "label": "Maximum gap between orders"
+                }
+            ],
+            "controls": [
+                {
+                    "id": "bp_symbol",
+                    "type": "symbol-selector",
+                    "label": "Symbol"
+                },
+                {
+                    "id": "bp_date_range",
+                    "type": "date-range",
+                    "label": "Data range"
+                },
+                {
+                    "id": "bp_strategy_selector",
+                    "type": "dropdown",
+                    "label": "Strategy"
+                },
+                {
+                    "id": "bp_mode_selector",
+                    "type": "dropdown",
+                    "label": "Mode",
+                    "options": [
+                        "single",
+                        "compare"
+                    ]
+                },
+                {
+                    "id": "bp_slippage_model",
+                    "type": "dropdown",
+                    "label": "Slippage model"
+                },
+                {
+                    "id": "bp_fees_toggle",
+                    "type": "toggle",
+                    "label": "Fees on/off"
+                },
+                {
+                    "id": "bp_seed",
+                    "type": "number-input",
+                    "label": "Random seed"
+                },
+                {
+                    "id": "bp_run_backtest",
+                    "type": "button-primary",
+                    "label": "Run backtest",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "runBacktest",
+                            "methodOverride": "POST"
+                        }
+                    }
+                },
+                {
+                    "id": "bp_save_strategy",
+                    "type": "button-secondary",
+                    "label": "Save strategy",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "saveStrategy",
+                            "methodOverride": "POST"
+                        }
+                    }
+                },
+                {
+                    "id": "bp_duplicate_strategy",
+                    "type": "button-secondary",
+                    "label": "Duplicate strategy",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "duplicateStrategy",
+                            "methodOverride": "POST"
+                        }
+                    }
+                },
+                {
+                    "id": "bp_run_with_new_params",
+                    "type": "button-secondary",
+                    "label": "Run with new params",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "runBacktest",
+                            "methodOverride": "POST"
+                        }
+                    }
+                },
+                {
+                    "id": "bp_overlay_runs",
+                    "type": "multi-select",
+                    "label": "Overlay runs"
+                },
+                {
+                    "id": "bp_download_results",
+                    "type": "button-ghost",
+                    "label": "Download results",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "exportBacktest",
+                            "methodOverride": "GET"
+                        }
+                    }
+                },
+                {
+                    "id": "bp_share_link",
+                    "type": "button-ghost",
+                    "label": "Share link",
+                    "action": {
+                        "type": "generateShareLink"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "w_strategy_lab",
+            "page": "strategies",
+            "section": "main",
+            "title": "LLM Strategy Lab",
+            "dataSources": [],
+            "metrics": [
+                {
+                    "id": "strategy_name",
+                    "label": "Strategy name"
+                },
+                {
+                    "id": "universe",
+                    "label": "Allowed symbols/universes"
+                },
+                {
+                    "id": "timeframe",
+                    "label": "Timeframe"
+                },
+                {
+                    "id": "constraints",
+                    "label": "Constraints"
+                },
+                {
+                    "id": "model_risk_score",
+                    "label": "Model risk score"
+                }
+            ],
+            "controls": [
+                {
+                    "id": "sl_prompt",
+                    "type": "textarea",
+                    "label": "Describe the strategy you want"
+                },
+                {
+                    "id": "sl_risk_level",
+                    "type": "dropdown",
+                    "label": "Risk level",
+                    "options": [
+                        "Conservative",
+                        "Balanced",
+                        "Aggressive"
+                    ]
+                },
+                {
+                    "id": "sl_horizon",
+                    "type": "dropdown",
+                    "label": "Target horizon",
+                    "options": [
+                        "Intraday",
+                        "Swing",
+                        "Position"
+                    ]
+                },
+                {
+                    "id": "sl_generate_strategy",
+                    "type": "button-primary",
+                    "label": "Generate Strategy",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "generateStrategy",
+                            "methodOverride": "POST"
+                        }
+                    }
+                },
+                {
+                    "id": "sl_validate_strategy",
+                    "type": "button-secondary",
+                    "label": "Validate Strategy",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "validateStrategy",
+                            "methodOverride": "POST"
+                        }
+                    }
+                },
+                {
+                    "id": "sl_send_to_backtest",
+                    "type": "button-secondary",
+                    "label": "Send to Backtest",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "backtestStrategy",
+                            "methodOverride": "POST"
+                        }
+                    }
+                },
+                {
+                    "id": "sl_explain_plain_english",
+                    "type": "button-ghost",
+                    "label": "Explain in plain English",
+                    "action": {
+                        "type": "apiCall",
+                        "config": {
+                            "endpointId": "explainStrategy",
+                            "methodOverride": "POST"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "apiEndpoints": [
+        {
+            "id": "getHealth",
+            "method": "GET",
+            "path": "/health",
+            "description": "Backend health check"
+        },
+        {
+            "id": "getSystemStatus",
+            "method": "GET",
+            "path": "/api/system/status",
+            "description": "System status including MD and exchange"
+        },
+        {
+            "id": "toggleMarketDataIngestion",
+            "method": "POST",
+            "path": "/api/admin/md/toggle",
+            "description": "Stop/Go for market data ingestion"
+        },
+        {
+            "id": "getPerformanceSummary",
+            "method": "GET",
+            "path": "/api/performance/summary",
+            "description": "Daily/weekly performance stats"
+        },
+        {
+            "id": "getGuardrailsState",
+            "method": "GET",
+            "path": "/api/guardrails/state",
+            "description": "Behavioral and risk guardrails state"
+        },
+        {
+            "id": "updateGuardrailsState",
+            "method": "POST",
+            "path": "/api/guardrails/state",
+            "description": "Update guardrails settings"
+        },
+        {
+            "id": "explainGuardrailsWarning",
+            "method": "POST",
+            "path": "/api/guardrails/explain",
+            "description": "LLM explanation for guardrail warning"
+        },
+        {
+            "id": "getWatchlist",
+            "method": "GET",
+            "path": "/api/markets/watchlist",
+            "description": "User watchlist with per-symbol stats"
+        },
+        {
+            "id": "updateWatchlist",
+            "method": "POST",
+            "path": "/api/markets/watchlist",
+            "description": "Add/remove/update watchlist entries"
+        },
+        {
+            "id": "getChartData",
+            "method": "GET",
+            "path": "/api/market-data/klines",
+            "description": "Kline/candlestick data"
+        },
+        {
+            "id": "getOrderBook",
+            "method": "GET",
+            "path": "/api/market-data/orderbook",
+            "description": "Order book snapshot"
+        },
+        {
+            "id": "getTrades",
+            "method": "GET",
+            "path": "/api/market-data/trades",
+            "description": "Recent trades / tape"
+        },
+        {
+            "id": "placePaperOrder",
+            "method": "POST",
+            "path": "/api/paper/orders",
+            "description": "Place paper order"
+        },
+        {
+            "id": "simulatePaperFill",
+            "method": "POST",
+            "path": "/api/paper/orders/simulate-fill",
+            "description": "Simulate fills for paper orders"
+        },
+        {
+            "id": "getWhales",
+            "method": "GET",
+            "path": "/api/polymarket/whales",
+            "description": "Whale wallets and trades"
+        },
+        {
+            "id": "getBacktestSummary",
+            "method": "GET",
+            "path": "/api/backtests/latest",
+            "description": "Latest backtest summary"
+        },
+        {
+            "id": "listBacktests",
+            "method": "GET",
+            "path": "/api/backtests",
+            "description": "List backtest runs"
+        },
+        {
+            "id": "runBacktest",
+            "method": "POST",
+            "path": "/api/backtests/run",
+            "description": "Run a new backtest"
+        },
+        {
+            "id": "exportBacktest",
+            "method": "GET",
+            "path": "/api/backtests/export",
+            "description": "Export backtest results"
+        },
+        {
+            "id": "saveStrategy",
+            "method": "POST",
+            "path": "/api/strategies/save",
+            "description": "Save a strategy spec"
+        },
+        {
+            "id": "duplicateStrategy",
+            "method": "POST",
+            "path": "/api/strategies/duplicate",
+            "description": "Duplicate an existing strategy"
+        },
+        {
+            "id": "generateStrategy",
+            "method": "POST",
+            "path": "/api/strategies/llm/generate",
+            "description": "LLM-based strategy generation"
+        },
+        {
+            "id": "validateStrategy",
+            "method": "POST",
+            "path": "/api/strategies/validate",
+            "description": "Validate StrategySpec"
+        },
+        {
+            "id": "backtestStrategy",
+            "method": "POST",
+            "path": "/api/strategies/backtest",
+            "description": "Run backtest for a StrategySpec"
+        },
+        {
+            "id": "explainStrategy",
+            "method": "POST",
+            "path": "/api/strategies/explain",
+            "description": "LLM explanation of strategy"
+        },
+        {
+            "id": "getNewCoins",
+            "method": "GET",
+            "path": "/api/coins/new",
+            "description": "New coins scanner"
+        },
+        {
+            "id": "analyzeWhitepaper",
+            "method": "POST",
+            "path": "/api/coins/analyze",
+            "description": "LLM whitepaper analysis"
+        },
+        {
+            "id": "explainCoin",
+            "method": "POST",
+            "path": "/api/coins/explain",
+            "description": "LLM explanation why coin is interesting"
+        },
+        {
+            "id": "getNews",
+            "method": "GET",
+            "path": "/api/news",
+            "description": "News feed with sentiment"
+        },
+        {
+            "id": "createDropWatch",
+            "method": "POST",
+            "path": "/api/news/drop-watch",
+            "description": "Create price drop watch from news event"
+        },
+        {
+            "id": "muteNewsTopic",
+            "method": "POST",
+            "path": "/api/news/mute",
+            "description": "Mute news topics"
+        },
+        {
+            "id": "getConnections",
+            "method": "GET",
+            "path": "/api/connections",
+            "description": "Exchange/API connections"
+        },
+        {
+            "id": "revalidateConnection",
+            "method": "POST",
+            "path": "/api/connections/revalidate",
+            "description": "Revalidate a connection"
+        },
+        {
+            "id": "deleteConnection",
+            "method": "DELETE",
+            "path": "/api/connections",
+            "description": "Delete a connection"
+        },
+        {
+            "id": "getBalances",
+            "method": "GET",
+            "path": "/api/wallets/balances",
+            "description": "Wallet and balance summary"
+        },
+        {
+            "id": "exportBalances",
+            "method": "GET",
+            "path": "/api/wallets/export",
+            "description": "Export balances"
+        },
+        {
+            "id": "getActivity",
+            "method": "GET",
+            "path": "/api/activity",
+            "description": "Order and trade activity"
+        },
+        {
+            "id": "exportActivity",
+            "method": "GET",
+            "path": "/api/activity/export",
+            "description": "Export activity"
+        },
+        {
+            "id": "getBilling",
+            "method": "GET",
+            "path": "/api/billing/summary",
+            "description": "Billing summary and usage"
+        },
+        {
+            "id": "cancelSubscription",
+            "method": "POST",
+            "path": "/api/billing/cancel",
+            "description": "Cancel subscription"
+        },
+        {
+            "id": "getProfile",
+            "method": "GET",
+            "path": "/api/profile",
+            "description": "User profile and settings"
+        },
+        {
+            "id": "updateProfile",
+            "method": "POST",
+            "path": "/api/profile",
+            "description": "Update user profile"
+        },
+        {
+            "id": "updateNotificationPreferences",
+            "method": "POST",
+            "path": "/api/profile/notifications",
+            "description": "Update notification preferences"
+        },
+        {
+            "id": "getAdminMetrics",
+            "method": "GET",
+            "path": "/api/admin/metrics",
+            "description": "Admin / ops metrics"
+        },
+        {
+            "id": "toggleFeatureFlag",
+            "method": "POST",
+            "path": "/api/admin/feature-flags/toggle",
+            "description": "Toggle a feature flag"
+        },
+        {
+            "id": "logout",
+            "method": "POST",
+            "path": "/api/auth/logout",
+            "description": "Logout user"
+        }
+    ]
+}

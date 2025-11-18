@@ -1,0 +1,41 @@
+{
+  "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+      "target": "ES2022",
+        "module": "ESNext",
+          "jsx": "preserve",
+            "moduleResolution": "Bundler",
+              "strict": true,
+                "skipLibCheck": true,
+                  "lib": [
+                    "dom",
+                    "dom.iterable",
+                    "esnext"
+                  ],
+                    "allowJs": true,
+                      "noEmit": true,
+                        "incremental": true,
+                          "esModuleInterop": true,
+                            "resolveJsonModule": true,
+                              "isolatedModules": true,
+                                "baseUrl": ".",
+                                  "paths": {
+      "@common/*": ["../../packages/common/src/*"],
+        "@backend/*": ["../../apps/backend/src/*"]
+    }
+  },
+  "include": [
+    "src",
+    "vitest-env.d.ts"
+  ],
+    "types": [
+      "react",
+      "react-dom",
+      "vitest/globals"
+    ],
+      "exclude": [
+        "../backend/**/*",
+        "node_modules"
+      ]
+}
