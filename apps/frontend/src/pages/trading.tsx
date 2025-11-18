@@ -1,1 +1,58 @@
-import Layout from '../components/Layout'; import { useTradingSession } from '../stores/tradingSessionStore'; export default function Trading(){ const s=useTradingSession(); return <Layout><h1>Trading Flow</h1><div className='row'><div className='card'><b>1) Run Agents</b><p><button className='btn' onClick={s.runAgents}>Run</button></p>{s.analysis && <pre>{JSON.stringify(s.analysis,null,2)}</pre>}</div><div className='card'><b>2) Plan</b><p><button className='btn' onClick={s.generatePlan} disabled={!s.analysis}>Generate</button></p>{s.plan && <pre>{JSON.stringify(s.plan,null,2)}</pre>}</div></div><div className='row'><div className='card'><b>3) Risk</b><p><button className='btn' onClick={()=>s.validateRisk({profile:'neutral',maxPositionPct:0.1,maxDailyLossPct:0.05,requireKillSwitch:true})} disabled={!s.plan}>Validate</button></p>{s.risk && <pre>{JSON.stringify(s.risk,null,2)}</pre>}</div><div className='card'><b>4) Approve</b><p><button className='btn' onClick={s.approvePaper} disabled={!s.risk || s.risk.status!=='ok'}>Approve Paper</button></p></div></div></Layout>; }
+import Layout from '../components/Layout';
+import { useTradingSession } from '../stores/tradingSessionStore';
+import { DataPanel } from '../legacy-ui';
+import { LegacyButton } from '../legacy-ui';
+
+export default function Trading() {
+  const s = useTradingSession();
+
+  return (
+    <Layout>
+      <h1>Trading Flow</h1>
+      <div className="dashboard-grid">
+        <DataPanel
+          title="1) Run Agents"
+          state={s.loading ? 'loading' : 'ready'}
+          actionLabel="Run"
+          onAction={s.runAgents}
+        >
+          {s.analysis ? <pre>{JSON.stringify(s.analysis, null, 2)}</pre> : <p className="panel-hint">No analysis yet.</p>}
+          <LegacyButton variant="ghost" onClick={() => s.reset()}>
+            Reset Flow
+          </LegacyButton>
+        </DataPanel>
+
+        <DataPanel
+          title="2) Generate Plan"
+          state={s.analysis ? 'ready' : 'empty'}
+          actionLabel="Generate"
+          onAction={s.generatePlan}
+        >
+          {s.plan ? <pre>{JSON.stringify(s.plan, null, 2)}</pre> : <p className="panel-hint">Run agents first.</p>}
+        </DataPanel>
+      </div>
+
+      <div className="dashboard-grid">
+        <DataPanel
+          title="3) Validate Risk"
+          state={s.plan ? 'ready' : 'empty'}
+          actionLabel="Validate"
+          onAction={() =>
+            s.validateRisk({ profile: 'neutral', maxPositionPct: 0.1, maxDailyLossPct: 0.05, requireKillSwitch: true })
+          }
+        >
+          {s.risk ? <pre>{JSON.stringify(s.risk, null, 2)}</pre> : <p className="panel-hint">Generate plan first.</p>}
+        </DataPanel>
+
+        <DataPanel
+          title="4) Approve Paper"
+          state={s.risk && s.risk.status === 'ok' ? 'ready' : 'empty'}
+          actionLabel="Approve"
+          onAction={s.approvePaper}
+        >
+          {s.approval ? <pre>{JSON.stringify(s.approval, null, 2)}</pre> : <p className="panel-hint">Need risk check.</p>}
+        </DataPanel>
+      </div>
+    </Layout>
+  );
+}

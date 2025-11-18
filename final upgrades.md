@@ -151,23 +151,23 @@ Run the flow once and confirm analysis/plan/risk/approval JSON renders and portf
 
 ### 2.1 Create `legacy-ui` staging area
 
-- [ ] Under `apps/frontend/src`, create `legacy-ui/`.
-- [ ] From legacy frontend, copy only components that clearly improve UX:
+- [x] Under `apps/frontend/src`, create `legacy-ui/`.
+- [x] From legacy frontend, copy only components that clearly improve UX:
   - Buttons/primitives (`components/ui/Button.tsx`)
   - Dashboard visuals (`components/dashboard/*`)
   - Trading visuals that match the existing four-step flow
-- [ ] Fix imports until `npm run dev` is clean (no new stores/routes).
+- [x] Fix imports until `npm run dev` is clean (no new stores/routes).
 
 ### 2.2 Upgrade `/dashboard`
 
-- [ ] Wrap with existing `Layout`.
-- [ ] Replace basic content with `legacy-ui` cards approximating the CryptoBot control surface.
-- [ ] Wire to existing backend data only (health, portfolio snapshot, simple stats).
+- [x] Wrap with existing `Layout`.
+- [x] Replace basic content with `legacy-ui` cards approximating the CryptoBot control surface.
+- [x] Wire to existing backend data only (health, portfolio snapshot, simple stats).
 
 ### 2.3 Upgrade `/trading`
 
-- [ ] Keep store logic (`tradingSessionStore.ts`) and existing APIs.
-- [ ] Replace `<pre>` JSON with structured cards/panels from `legacy-ui`.
+- [x] Keep store logic (`tradingSessionStore.ts`) and existing APIs.
+- [x] Replace `<pre>` JSON with structured cards/panels from `legacy-ui`.
 - [ ] After Gate 5 backlog items land, panels can grow (portfolio/history widgets).
 
 > **Gate 2 exit condition:** Frontend still hits the same APIs, but `/dashboard` and `/trading` now use legacy-inspired components for better UX with no new backend dependencies.

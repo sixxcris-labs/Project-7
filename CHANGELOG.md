@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - `final upgrades.md`: Marked Gate 0.1 (tooling/env/build sanity) as completed after verifying Node 24.10.0, Python 3.11.9, root `npm install`, `.env` creation, and `npm run build`.
 - `final upgrades.md`: Marked Gate 0.2 (quant baseline) as completed after creating the venv, installing requirements, and successfully hitting `/analysis` and `/trade-plan/generate` via FastAPI `TestClient`.
 - `final upgrades.md`: Marked Gate 1 (zod schemas, PaperStore sanity, and MultiAgentService coverage) as complete after centralizing schemas, adding validation tests, and confirming PaperStore structure + quant integration.
+- `final upgrades.md`: Marked Gate 2 (legacy UI staging, dashboard/trading upgrades) as complete after adding legacy UI panels, buttons, and styled dashboards that still consume the existing APIs.
 
 ### Removed
 - `PROJECT7_V3_FINAL_UPGRADE_GATE_PLAN.md`: Gate content was merged into `final upgrades.md` to avoid duplicated instructions.

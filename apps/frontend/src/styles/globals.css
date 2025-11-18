@@ -1,1 +1,23 @@
-*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#e6eefc;font-family:system-ui}a{color:#7dd3fc}.container{max-width:1100px;margin:0 auto;padding:24px}.card{background:#0f172a;border:1px solid #1e293b;border-radius:14px;padding:16px;margin-bottom:16px}.btn{background:#22c55e;border:0;color:#052e16;padding:8px 12px;border-radius:10px;cursor:pointer}.row{display:grid;grid-template-columns:1fr 1fr;gap:16px}.small{font-size:12px;color:#9ca3af}
+*{box-sizing:border-box}
+body{margin:0;background:#0b1220;color:#e6eefc;font-family:system-ui}
+a{color:#7dd3fc}
+.container{max-width:1100px;margin:0 auto;padding:24px}
+.card{background:#0f172a;border:1px solid #1e293b;border-radius:14px;padding:16px;margin-bottom:16px}
+.btn{background:#22c55e;border:0;color:#052e16;padding:8px 12px;border-radius:10px;cursor:pointer}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.small{font-size:12px;color:#9ca3af}
+.dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:16px}
+.panel-card{background:#0f172a;border:1px solid #1c2540;border-radius:16px;padding:18px;min-height:140px;display:flex;flex-direction:column}
+.panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.panel-header h3{margin:0;font-size:1.1rem;letter-spacing:.02em}
+.panel-body{flex:1;display:flex;flex-direction:column;gap:8px}
+.panel-cta{background:#1e40af;border:none;color:#e2e8f0;padding:6px 10px;border-radius:999px;cursor:pointer}
+.panel-hint{margin:0;color:#94a3b8;font-size:.95rem}
+.legacy-btn{border-radius:12px;padding:8px 14px;font-weight:600;cursor:pointer;transition:transform .2s}
+.legacy-btn-primary{background:#22c55e;border:0;color:#052e16}
+.legacy-btn-ghost{background:transparent;border:1px solid #475569;color:#f8fafc}
+.status-pill{display:inline-flex;padding:4px 10px;border-radius:999px;background:#15283b;color:#7dd3fc;font-size:.8rem;letter-spacing:.08em}
+.dashboard-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
+.dashboard-summary{display:flex;gap:16px;flex-wrap:wrap}
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:16px}
+.metric-card{background:rgba(59,130,246,.1);border-radius:12px;padding:12px;font-size:.9rem}
