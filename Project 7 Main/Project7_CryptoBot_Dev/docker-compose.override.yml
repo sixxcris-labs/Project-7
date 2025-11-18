@@ -1,0 +1,7 @@
+services:
+  backend:
+    environment:
+      BINANCE_REST_URL: "https://api.binance.us"
+      BINANCE_SYMBOLS: "BTCUSDT,ETHUSDT"
+    volumes:
+      - "/mnt/c/Users/Cristian/p7-secrets:/home/cristian/p7-secrets:ro"

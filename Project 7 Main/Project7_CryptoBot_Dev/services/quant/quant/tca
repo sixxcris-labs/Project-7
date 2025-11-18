@@ -1,0 +1,17 @@
+def implementation_shortfall(decision_price, execution_prices, quantities, side: str):
+    if not execution_prices or not quantities: return 0.0
+    if len(execution_prices)!=len(quantities): raise ValueError("length mismatch")
+    side=side.lower(); qty=sum(quantities); vwexec=sum(p*q for p,q in zip(execution_prices,quantities))/qty if qty else 0.0
+    return (vwexec-decision_price)*qty if side.startswith('b') else (decision_price-vwexec)*qty
+def effective_spread(mid_prices, execution_prices, side: str):
+    sgn=1.0 if side.lower().startswith('b') else -1.0
+    pairs=list(zip(mid_prices, execution_prices)); 
+    if not pairs: return 0.0
+    vals=[2*sgn*(e-m)/m for m,e in pairs if m>0]; 
+    return sum(vals)/len(vals) if vals else 0.0
+def total_slippage(benchmark_prices, execution_prices, side: str):
+    sgn=1.0 if side.lower().startswith('b') else -1.0
+    pairs=list(zip(benchmark_prices, execution_prices)); 
+    if not pairs: return 0.0
+    vals=[sgn*(e-b)/b for b,e in pairs if b>0]; 
+    return sum(vals)/len(vals) if vals else 0.0

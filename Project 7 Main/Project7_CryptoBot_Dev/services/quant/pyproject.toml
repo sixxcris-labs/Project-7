@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crypto-quant-ai"
+version = "0.1.0"
+description = "Autonomous crypto trading agent: research, backtest, execution, risk, and monitoring."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "pandas",
+    "pyyaml",
+    "tqdm",
+    "requests",
+    "scipy",
+    "statsmodels",
+    "duckdb",
+    "pyarrow",
+    "fastapi",
+    "uvicorn",
+    "ccxt",
+    "websockets",
+    "pydantic>=2",
+    "matplotlib",
+    "tenacity",
+    "sqlalchemy",
+    "faiss-cpu; platform_system != 'Windows'",
+    "langchain",
+    "openai"
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.poetry.dependencies]
+fm-sdk = { path = "vendor/fm-sdk-python", develop = true }
